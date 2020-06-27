@@ -1,4 +1,5 @@
 FROM alpine
+MAINTAINER kmin
 
 RUN apk update
 RUN apk add openssh
