@@ -1,12 +1,48 @@
-# 클러스터 만들기
+# echo "대쉬보드 설치"
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+# echo "대쉬보드 접근 토큰 생성"
+# kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 
-# gcloud container clusters create kmin-cluster --num-nodes=3 --machine-type=n1-standard-2 --zone asia-northeast2-a 
-# 디스크만들기
+# echo "metallb설치"
+# kubectl get configmap kube-proxy -n kube-system -o yaml | \
+# sed -e "s/strictARP: false/strictARP: true/" | \
+# kubectl diff -f - -n kube-system
+# kubectl get configmap kube-proxy -n kube-system -o yaml | \
+# sed -e "s/strictARP: false/strictARP: true/" | \
+# kubectl apply -f - -n kube-system
+# kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+# kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+# kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+# kubectl apply -f metallb-config.yaml
 
-# gcloud compute disks create pv-kmin-disk --size 10GB --zone asia-northeast2-a
+echo "local image 사용가능하게 하기"
+eval $(minikube docker-env)
 
+cd ./srcs/nginx
+echo "ssl키 생성"
+# make keys
+echo "nginx ssl secret 생성"
+kubectl apply -f nginxsecret.yaml
+echo "nginx configmap 생성"
+kubectl create configmap nginxconfigmap --from-file=default.conf
+echo "nginx image build"
+docker build -t service-nginx .
+echo "nginx deployment 생성"
+kubectl apply -f nginx.yaml
+cd ../
 
-#Dockerfile 이미지 만들기
+cd ./mysql
+echo "mysql secret 생성"
+kubectl apply -f mysqlpw.yaml
+echo "mysql image build"
+docker build -t service-mysql .
+echo "mysql deployment 생성"
+kubectl apply -f mysql.yaml
+cd ../
 
-docker build -t service_nginx ./srcs/nginx
-docker build -t service_influxdb ./srcs/influxdb
+cd ./php
+echo "wordpress image build"
+docker build -t service-wordpress .
+echo "wordpress deployment 생성"
+kubectl apply -f php.yaml
+cd ../
