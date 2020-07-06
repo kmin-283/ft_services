@@ -15,23 +15,13 @@
 # kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 # kubectl apply -f metallb-config.yaml
 
-echo "local image 사용가능하게 하기"
+# echo "local image 사용가능하게 하기"
 eval $(minikube docker-env)
 
-cd ./srcs/nginx
-echo "ssl키 생성"
-# make keys
-echo "nginx ssl secret 생성"
-kubectl apply -f nginxsecret.yaml
-echo "nginx configmap 생성"
-kubectl create configmap nginxconfigmap --from-file=default.conf
-echo "nginx image build"
-docker build -t service-nginx .
-echo "nginx deployment 생성"
-kubectl apply -f nginx.yaml
-cd ../
+# echo "ssl키 생성"
+# # make keys
 
-cd ./mysql
+cd ./srcs/mysql
 echo "mysql secret 생성"
 kubectl apply -f mysqlpw.yaml
 echo "mysql image build"
@@ -40,9 +30,20 @@ echo "mysql deployment 생성"
 kubectl apply -f mysql.yaml
 cd ../
 
-cd ./php
+cd ./wordpress
 echo "wordpress image build"
 docker build -t service-wordpress .
 echo "wordpress deployment 생성"
-kubectl apply -f php.yaml
+kubectl apply -f wordpress.yaml
+cd ../
+
+cd ./nginx
+echo "nginx ssl secret 생성"
+kubectl apply -f nginxsecret.yaml
+echo "nginx configmap 생성"
+kubectl create configmap nginxconfigmap --from-file=default.conf --from-file=proxy.conf
+echo "nginx image build"
+docker build -t service-nginx .
+echo "nginx deployment 생성"
+kubectl apply -f nginx.yaml
 cd ../

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-wordpress
+  name: nginx
   labels:
     app: nginx
 spec:
@@ -21,8 +21,12 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx
+  labels:
+    app: nginx
 spec:
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: nginx
@@ -36,14 +40,14 @@ spec:
       - name: secret-volumes
         secret:
           secretName: nginxsecret
-      - name: wordpress-volumes
-        persistentVolumeClaim:
-          claimName: wp-pv-claim
       - name: configmap-volumes
         configMap:
           name: nginxconfigmap
+      - name: proxy-volumes
+        configMap:
+          name: nginxproxy
       containers:
-      - name: nginxhttps
+      - name: nginx
         image: service-nginx
         imagePullPolicy: Never
         ports:
@@ -54,5 +58,3 @@ spec:
           name: secret-volumes
         - mountPath: /etc/nginx/conf.d
           name: configmap-volumes
-        - mountPath: /var/www/html/
-          name: wordpress-volumes
