@@ -37,6 +37,13 @@ echo "wordpress deployment 생성"
 kubectl apply -f wordpress.yaml
 cd ../
 
+cd ./phpmyadmin
+echo "phpmyadmin image build"
+docker build -t service-phpmyadmin .
+echo "phpmyadmin deployment 생성"
+kubectl apply -f phpmyadmin.yaml
+cd ../
+
 cd ./nginx
 echo "nginx ssl secret 생성"
 kubectl apply -f nginxsecret.yaml

@@ -14,6 +14,9 @@ spec:
     targetPort: 443
     protocol: TCP
     name: https
+  - port: 22
+    targetPort: 22
+    name: ssh
   selector:
     app: nginx
   type: LoadBalancer
@@ -53,6 +56,7 @@ spec:
         ports:
         - containerPort: 80
         - containerPort: 443
+        - containerPort: 22
         volumeMounts:
         - mountPath: /etc/nginx/ssl
           name: secret-volumes
