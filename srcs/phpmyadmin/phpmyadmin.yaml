@@ -42,7 +42,6 @@ metadata:
   labels:
     app: phpmyadmin
 spec:
-  type: ClusterIP
   ports:
   - name: phpmyadmin
     protocol: TCP
@@ -59,10 +58,8 @@ data:
   config.inc.php: |
     <?php
     $i = 0;
-
     $i++;
     $cfg['Servers'][$i]['host'] = 'mysql';
-
     $cfg['blowfish_secret'] = 'i0ULtq/xlL:x;F7AjIYH=2I82cI[Vrly';
     $cfg['DefaultLang'] = 'en';
     $cfg['ServerDefault'] = 1;

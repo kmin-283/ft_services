@@ -79,8 +79,8 @@ data:
     define( 'WP_SITEURL',       '/wordpress/'  );
     define( 'WP_HOME',          '/wordpress/'  );
     define( 'DB_NAME',          'wordpress'  );
-    define( 'DB_USER',          getenv('USERNAME'));
-    define( 'DB_PASSWORD',      getenv('PASSWORD'));
+    define( 'DB_USER',          'kmin');
+    define( 'DB_PASSWORD',      'kmin');
     define( 'DB_HOST',          'mysql'  );
     define( 'DB_CHARSET',       'utf8mb4'  );
     define( 'DB_COLLATE',       '' );
@@ -120,5 +120,5 @@ kind: Secret
 metadata:
   name: wordpress-secret
 stringData:
-  username: admin
-  password: admin
+  username: kmin
+  password: kmin

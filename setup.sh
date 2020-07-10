@@ -21,25 +21,32 @@ eval $(minikube docker-env)
 # echo "ssl키 생성"
 # # make keys
 
-cd ./srcs/mysql
+cd ./srcs/
+echo "mysql image build"
+docker build -t service-mysql ./mysql
+echo "wordpress image build"
+docker build -t service-wordpress ./wordpress
+echo "phpmyadmin image build"
+docker build -t service-phpmyadmin ./phpmyadmin
+echo "nginx image build"
+docker build -t service-nginx ./nginx
+echo "이미지 생성 완료"
+
+sleep 2
+
+cd ./mysql
 echo "mysql secret 생성"
 kubectl apply -f mysqlpw.yaml
-echo "mysql image build"
-docker build -t service-mysql .
 echo "mysql deployment 생성"
 kubectl apply -f mysql.yaml
 cd ../
 
 cd ./wordpress
-echo "wordpress image build"
-docker build -t service-wordpress .
 echo "wordpress deployment 생성"
 kubectl apply -f wordpress.yaml
 cd ../
 
 cd ./phpmyadmin
-echo "phpmyadmin image build"
-docker build -t service-phpmyadmin .
 echo "phpmyadmin deployment 생성"
 kubectl apply -f phpmyadmin.yaml
 cd ../
@@ -49,8 +56,6 @@ echo "nginx ssl secret 생성"
 kubectl apply -f nginxsecret.yaml
 echo "nginx configmap 생성"
 kubectl create configmap nginxconfigmap --from-file=default.conf --from-file=proxy.conf
-echo "nginx image build"
-docker build -t service-nginx .
 echo "nginx deployment 생성"
 kubectl apply -f nginx.yaml
 cd ../

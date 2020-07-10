@@ -18,9 +18,4 @@ fi
 chmod -R 755 /var/www/localhost/
 chown -R lighttpd:lighttpd /var/www/localhost
 
-ssh-keygen -A
-adduser --disabled-password kmin
-echo "kmin:kmin" | chpasswd
-/usr/sbin/sshd
-
 lighttpd -D -f /etc/lighttpd/lighttpd.conf
