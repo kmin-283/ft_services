@@ -32,30 +32,20 @@ echo "nginx image build"
 docker build -t service-nginx ./nginx
 echo "이미지 생성 완료"
 
-sleep 2
-
-cd ./mysql
 echo "mysql secret 생성"
-kubectl apply -f mysqlpw.yaml
+kubectl apply -f ./mysql/mysqlpw.yaml
 echo "mysql deployment 생성"
-kubectl apply -f mysql.yaml
-cd ../
+kubectl apply -f ./mysql/mysql.yaml
 
-cd ./wordpress
 echo "wordpress deployment 생성"
-kubectl apply -f wordpress.yaml
-cd ../
+kubectl apply -f ./wordpress/wordpress.yaml
 
-cd ./phpmyadmin
 echo "phpmyadmin deployment 생성"
-kubectl apply -f phpmyadmin.yaml
-cd ../
+kubectl apply -f ./phpmyadmin/phpmyadmin.yaml
 
-cd ./nginx
 echo "nginx ssl secret 생성"
-kubectl apply -f nginxsecret.yaml
+kubectl apply -f ./nginx/nginxsecret.yaml
 echo "nginx configmap 생성"
-kubectl create configmap nginxconfigmap --from-file=default.conf --from-file=proxy.conf
+kubectl create configmap nginxconfigmap --from-file=./nginx/default.conf --from-file=./nginx/proxy.conf
 echo "nginx deployment 생성"
-kubectl apply -f nginx.yaml
-cd ../
+kubectl apply -f ./nginx/nginx.yaml

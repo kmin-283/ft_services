@@ -53,4 +53,4 @@ rc-service php-fpm7 start
 rc-status
 
 nginx -s stop
-nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
+nginx -g 'daemon off;'

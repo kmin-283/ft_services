@@ -1,13 +1,5 @@
 #!/bin/sh
 
-if [[ ! -d /var/run/lighttpd ]]; then
-	mkdir -p /var/run/lighttpd
-	chown -R lighttpd:lighttpd /var/run/lighttpd
-fi
-
-sed -i '/"mod_fastcgi.conf"/s/^#*\s*//g' /etc/lighttpd/lighttpd.conf
-sed -i '/bin-path/s/\<php-cgi\>/php-cgi7/g' /etc/lighttpd/mod_fastcgi.conf
-
 if [[ ! -f /var/www/localhost/htdocs/index.php ]]; then
 
 	curl -SL https://files.phpmyadmin.net/phpMyAdmin/$PMA_VERSION/phpMyAdmin-$PMA_VERSION-all-languages.tar.xz \
@@ -15,7 +7,36 @@ if [[ ! -f /var/www/localhost/htdocs/index.php ]]; then
 
 fi
 
-chmod -R 755 /var/www/localhost/
-chown -R lighttpd:lighttpd /var/www/localhost
+adduser -D -g www www
+chown -R www:www /var/www/localhost/htdocs/
 
-lighttpd -D -f /etc/lighttpd/lighttpd.conf
+# setup openrc
+mkdir -p /run/openrc/
+touch /run/openrc/softlevel
+
+# config php-fpm
+sed -i "s/;listen.owner\s*=\s*nobody/listen.owner = ${PHP_FPM_USER}/g" /etc/php7/php-fpm.d/www.conf
+sed -i "s/;listen.group\s*=\s*nobody/listen.group = ${PHP_FPM_GROUP}/g" /etc/php7/php-fpm.d/www.conf
+sed -i "s/;listen.mode\s*=\s*0660/listen.mode = ${PHP_FPM_LISTEN_MODE}/g" /etc/php7/php-fpm.d/www.conf
+sed -i "s/user\s*=\s*nobody/user = ${PHP_FPM_USER}/g" /etc/php7/php-fpm.d/www.conf
+sed -i "s/group\s*=\s*nobody/group = ${PHP_FPM_GROUP}/g" /etc/php7/php-fpm.d/www.conf
+sed -i "s/;log_level\s*=\s*notice/log_level = notice/g" /etc/php7/php-fpm.d/www.conf #uncommenting line
+
+sed -i "s/display_errors\s*=\s*Off/display_errors = ${PHP_DISPLAY_ERRORS}/i" /etc/php7/php.ini
+sed -i "s/display_startup_errors\s*=\s*Off/display_startup_errors = ${PHP_DISPLAY_STARTUP_ERRORS}/i" /etc/php7/php.ini
+sed -i "s/error_reporting\s*=\s*E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = ${PHP_ERROR_REPORTING}/i" /etc/php7/php.ini
+sed -i "s/;*memory_limit =.*/memory_limit = ${PHP_MEMORY_LIMIT}/i" /etc/php7/php.ini
+sed -i "s/;*upload_max_filesize =.*/upload_max_filesize = ${PHP_MAX_UPLOAD}/i" /etc/php7/php.ini
+sed -i "s/;*max_file_uploads =.*/max_file_uploads = ${PHP_MAX_FILE_UPLOAD}/i" /etc/php7/php.ini
+sed -i "s/;*post_max_size =.*/post_max_size = ${PHP_MAX_POST}/i" /etc/php7/php.ini
+sed -i "s/;*cgi.fix_pathinfo=.*/cgi.fix_pathinfo= ${PHP_CGI_FIX_PATHINFO}/i" /etc/php7/php.ini
+# config nginx
+sed -i "s/user\s*\s*nginx/user www/g" /etc/nginx/nginx.conf
+
+rc-status
+rc-service nginx start
+rc-service php-fpm7 start
+rc-status
+
+nginx -s stop
+nginx -g 'daemon off;'

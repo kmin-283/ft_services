@@ -66,6 +66,7 @@ data:
     $cfg['UploadDir'] = '';
     $cfg['SaveDir'] = '';
     $cfg['PmaAbsoluteUri'] = '/phpmyadmin/';
+    $cfg['LoginCookieValidity'] = 2000;
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
