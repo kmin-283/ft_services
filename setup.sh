@@ -23,29 +23,30 @@ eval $(minikube docker-env)
 
 cd ./srcs/
 echo "mysql image build"
-docker build -t service-mysql ./mysql
+docker build -t service-mysql ./mysql > /dev/null
 echo "wordpress image build"
-docker build -t service-wordpress ./wordpress
+docker build -t service-wordpress ./wordpress > /dev/null
 echo "phpmyadmin image build"
-docker build -t service-phpmyadmin ./phpmyadmin
+docker build -t service-phpmyadmin ./phpmyadmin > /dev/null
 echo "nginx image build"
-docker build -t service-nginx ./nginx
+docker build -t service-nginx ./nginx > /dev/null
+echo "ftps image build"
+docker build -t service-ftps ./ftps
 echo "이미지 생성 완료"
 
 echo "mysql secret 생성"
-kubectl apply -f ./mysql/mysqlpw.yaml
+kubectl apply -f ./mysql/mysqlpw.yaml > /dev/null
 echo "mysql deployment 생성"
-kubectl apply -f ./mysql/mysql.yaml
-
+kubectl apply -f ./mysql/mysql.yaml > /dev/null
 echo "wordpress deployment 생성"
-kubectl apply -f ./wordpress/wordpress.yaml
-
+kubectl apply -f ./wordpress/wordpress.yaml > /dev/null
 echo "phpmyadmin deployment 생성"
-kubectl apply -f ./phpmyadmin/phpmyadmin.yaml
-
+kubectl apply -f ./phpmyadmin/phpmyadmin.yaml > /dev/null
 echo "nginx ssl secret 생성"
-kubectl apply -f ./nginx/nginxsecret.yaml
+kubectl apply -f ./nginx/nginxsecret.yaml > /dev/null
 echo "nginx configmap 생성"
-kubectl create configmap nginxconfigmap --from-file=./nginx/default.conf --from-file=./nginx/proxy.conf
+kubectl create configmap nginxconfigmap --from-file=./nginx/default.conf --from-file=./nginx/proxy.conf > /dev/null
 echo "nginx deployment 생성"
-kubectl apply -f ./nginx/nginx.yaml
+kubectl apply -f ./nginx/nginx.yaml > /dev/null
+echo "ftps deployment 생성"
+kubectl apply -f ./ftps/ftps.yaml
