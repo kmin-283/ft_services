@@ -36,6 +36,8 @@ echo "telegraf image build"
 docker build -t service-telegraf ./telegraf
 echo "influxdb image build"
 docker build -t service-influxdb ./influxdb
+echo "grafana image build"
+docker build -t service-grafana ./grafana
 echo "이미지 생성 완료"
 
 echo "mysql secret 생성"
@@ -54,9 +56,12 @@ echo "nginx deployment 생성"
 kubectl apply -f ./nginx/nginx.yaml > /dev/null
 echo "ftps deployment 생성"
 kubectl apply -f ./ftps/ftps.yaml > /dev/null
-echo "telegraf deployment 생성"
-kubectl apply -f ./telegraf/telegrafconf.yaml
-kubectl apply -f ./telegraf/telegraf.yaml
 echo "influxdb deployment 생성"
 kubectl apply -f ./influxdb/influxdbconf.yaml
 kubectl apply -f ./influxdb/influxdb.yaml
+echo "telegraf deployment 생성"
+kubectl apply -f ./telegraf/telegrafconf.yaml
+kubectl apply -f ./telegraf/telegraf.yaml
+echo "grafana deployment 생성"
+kubectl apply -f ./grafana/grafana.yaml
+echo "모든 deployment 완료"

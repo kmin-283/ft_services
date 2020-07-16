@@ -1,12 +1,12 @@
 apiVersion: v1
-kind: configMap
+kind: ConfigMap
 metadata:
   name: influxdb-config
   labels:
     app: influxdb
 data:
   influxdb.conf: |
-      [meta]
+    [meta]
       # Where the metadata/raft database is stored
       dir = "/var/lib/influxdb/meta"
 
@@ -141,6 +141,7 @@ data:
     ###
 
     [tls]
+
 ---
 apiVersion: v1
 kind: Secret

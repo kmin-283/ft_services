@@ -19,12 +19,19 @@ spec:
         imagePullPolicy: Never
         volumeMounts:
         - name: telegraf-config
+          subPath: telegraf.conf
           mountPath: /etc/telegraf/telegraf.conf
           readOnly: true
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
         envFrom:
         - secretRef:
             name: telegraf-secret
-    volumes:
-    - name: telegraf-config
-      configMap:
-        name: telegraf-config
+      volumes:
+      - name: telegraf-config
+        configMap:
+          name: telegraf-config
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket

@@ -2,41 +2,42 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: influxdb
-	labels:
-	  app: influxdb
+  labels:
+    app: influxdb
 spec:
   strategy:
-	  type: Recreate
-	selector:
-	  matchLabels:
-		  app: influxdb
-	template:
-	  metadata:
-		  labels:
-			  app: influxdb
-		spec:
-		  containers:
-			- name: influxdb
-			  image: service-influxdb
-				imagePullPolicy: Never
-				ports:
-				- containerPort: 8086
-				volumeMounts:
-				- name: influxdb-pv-claim
-				  mountPath: /var/lib/influxdb
-				- name: influxdb-config
-				  mountPath: /etc/influxdb/influxdb.conf
-					readOnly: true
-				envFrom:
-				- secretRef:
-				    name: influxdb-secret
-			volumes:
-			- name: influxdb-pv-claim
-			  persistentVolumeClaim:
-				  claimName: influxdb-pv-claim
-			- name: influxdb-config
-			  configMap:
-				  name: influxdb-config
+    type: Recreate
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: service-influxdb
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8086
+        volumeMounts:
+        - name: influxdb-pv-claim
+          mountPath: /var/lib/influxdb
+        - name: influxdb-config
+          subPath: influxdb.conf
+          mountPath: /etc/influxdb/influxdb.conf
+          readOnly: true
+        envFrom:
+        - secretRef:
+            name: influxdb-secret
+      volumes:
+      - name: influxdb-pv-claim
+        persistentVolumeClaim:
+          claimName: influxdb-pv-claim
+      - name: influxdb-config
+        configMap:
+          name: influxdb-config
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
