@@ -9,7 +9,7 @@ data:
     [meta]
       # Where the metadata/raft database is stored
       dir = "/var/lib/influxdb/meta"
-
+      bind-address=":8088"
       # Automatically create a default retention policy when creating a database.
       # retention-autocreate = true
 
@@ -62,6 +62,7 @@ data:
 
     [monitor]
 
+    [admin]
     ###
     ### [http]
     ###
@@ -83,7 +84,7 @@ data:
       bind-address = ":8086"
 
       # Determines whether user authentication is enabled over HTTP/HTTPS.
-      auth-enabled = true
+      # auth-enabled = false
 
     ###
     ### [logging]
@@ -141,14 +142,13 @@ data:
     ###
 
     [tls]
-
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: influxdb-secret
   labels:
-    name: influxdb
+    app: influxdb
 type: Opaque
 stringData:
   INFLUXDB_DB: telegraf

@@ -62,6 +62,6 @@ kubectl apply -f ./influxdb/influxdb.yaml
 echo "telegraf deployment 생성"
 kubectl apply -f ./telegraf/telegrafconf.yaml
 kubectl apply -f ./telegraf/telegraf.yaml
-echo "grafana deployment 생성"
-kubectl apply -f ./grafana/grafana.yaml
+# echo "grafana deployment 생성"
+# kubectl apply -f ./grafana/grafana.yaml
 echo "모든 deployment 완료"
