@@ -1,16 +1,10 @@
-FROM alpine
-MAINTAINER kmin
+FROM alpine:latest
 
-RUN apk update
-RUN apk add influxdb
-RUN apk add bash
-RUN apk add telegraf --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
+RUN apk update && apk add influxdb
 
-RUN mkdir -p /etc/telegraf
 RUN mkdir -p /etc/influxdb
-COPY ./telegraf.conf /etc/telegraf/telegraf.conf
+RUN mkdir -p /var/lib/influxdb
 
-COPY ./start.sh /start.sh
-RUN chmod +x /start.sh
 EXPOSE 8086
-CMD ./start.shg
+
+ENTRYPOINT ["/usr/sbin/influxd"]

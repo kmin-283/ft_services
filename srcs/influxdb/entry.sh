@@ -1,0 +1,2 @@
+influxd &
+telegraf

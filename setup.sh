@@ -31,7 +31,11 @@ docker build -t service-phpmyadmin ./phpmyadmin > /dev/null
 echo "nginx image build"
 docker build -t service-nginx ./nginx > /dev/null
 echo "ftps image build"
-docker build -t service-ftps ./ftps
+docker build -t service-ftps ./ftps > /dev/null
+echo "telegraf image build"
+docker build -t service-telegraf ./telegraf
+echo "influxdb image build"
+docker build -t service-influxdb ./influxdb
 echo "이미지 생성 완료"
 
 echo "mysql secret 생성"
@@ -49,4 +53,10 @@ kubectl create configmap nginxconfigmap --from-file=./nginx/default.conf --from-
 echo "nginx deployment 생성"
 kubectl apply -f ./nginx/nginx.yaml > /dev/null
 echo "ftps deployment 생성"
-kubectl apply -f ./ftps/ftps.yaml
+kubectl apply -f ./ftps/ftps.yaml > /dev/null
+echo "telegraf deployment 생성"
+kubectl apply -f ./telegraf/telegrafconf.yaml
+kubectl apply -f ./telegraf/telegraf.yaml
+echo "influxdb deployment 생성"
+kubectl apply -f ./influxdb/influxdbconf.yaml
+kubectl apply -f ./influxdb/influxdb.yaml
