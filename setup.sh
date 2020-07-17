@@ -33,9 +33,9 @@ docker build -t service-nginx ./nginx > /dev/null
 echo "ftps image build"
 docker build -t service-ftps ./ftps > /dev/null
 echo "telegraf image build"
-docker build -t service-telegraf ./telegraf
+docker build -t service-telegraf ./telegraf > /dev/null
 echo "influxdb image build"
-docker build -t service-influxdb ./influxdb
+docker build -t service-influxdb ./influxdb > /dev/null
 echo "grafana image build"
 docker build -t service-grafana ./grafana
 echo "이미지 생성 완료"
@@ -57,11 +57,11 @@ kubectl apply -f ./nginx/nginx.yaml > /dev/null
 echo "ftps deployment 생성"
 kubectl apply -f ./ftps/ftps.yaml > /dev/null
 echo "influxdb deployment 생성"
-kubectl apply -f ./influxdb/influxdbconf.yaml
-kubectl apply -f ./influxdb/influxdb.yaml
+kubectl apply -f ./influxdb/influxdbconf.yaml > /dev/null
+kubectl apply -f ./influxdb/influxdb.yaml > /dev/null
 echo "telegraf deployment 생성"
-kubectl apply -f ./telegraf/telegrafconf.yaml
-kubectl apply -f ./telegraf/telegraf.yaml
-# echo "grafana deployment 생성"
-# kubectl apply -f ./grafana/grafana.yaml
+kubectl apply -f ./telegraf/telegrafconf.yaml > /dev/null
+kubectl apply -f ./telegraf/telegraf.yaml > /dev/null
+echo "grafana deployment 생성"
+kubectl apply -f ./grafana/grafana.yaml
 echo "모든 deployment 완료"
