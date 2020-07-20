@@ -24,7 +24,7 @@ eval $(minikube docker-env)
 
 cd ./srcs/
 echo "mysql image build"
-docker build -t service-mysql ./mysql > /dev/null
+docker build -t service-mysql ./mysql
 echo "wordpress image build"
 docker build -t service-wordpress ./wordpress > /dev/null
 echo "phpmyadmin image build"
@@ -41,10 +41,10 @@ echo "grafana image build"
 docker build -t service-grafana ./grafana > /dev/null
 echo "이미지 생성 완료"
 
-echo "mysql secret 생성"
-kubectl apply -f ./mysql/mysqlpw.yaml > /dev/null
+# echo "mysql secret 생성"
+# kubectl apply -f ./mysql/mysqlpw.yaml > /dev/null
 echo "mysql deployment 생성"
-kubectl apply -f ./mysql/mysql.yaml > /dev/null
+kubectl apply -f ./mysql/mysql.yaml
 echo "wordpress deployment 생성"
 kubectl apply -f ./wordpress/wordpress.yaml > /dev/null
 echo "phpmyadmin deployment 생성"

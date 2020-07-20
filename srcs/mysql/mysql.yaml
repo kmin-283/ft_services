@@ -1,15 +1,60 @@
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: mysql
   labels:
     app: mysql
 spec:
-  ports:
-    - port: 3306
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: service-mysql
+        imagePullPolicy: Never
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        volumeMounts:
+        - name: mysql-config
+          mountPath: /etc/my.cnf.d/mariadb-server.cnf
+          subPath: mariadb-server.cnf
+        - name: mysql-persistent-storage
+          mountPath: /data
+          subPath: mysql
+      volumes:
+      - name: mysql-config
+        configMap:
+          name: mysql-config
+          items:
+          - key: mysql.cnf
+            path: mariadb-server.cnf
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
   selector:
     app: mysql
-  clusterIP: None
+  ports:
+  - name: mysql
+    port: 3306
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -24,40 +69,25 @@ spec:
     requests:
       storage: 2Gi
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: mysql
-  labels:
-    app: mysql
-spec:
-  selector:
-    matchLabels:
-      app: mysql
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: mysql
-    spec:
-      containers:
-      - image: service-mysql
-        imagePullPolicy: Never
-        name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-pass
-              key: password
-        ports:
-        - containerPort: 3306
-          name: mysql
-        volumeMounts:
-        - name: mysql-persistent-storage
-          mountPath: /var/lib/mysql
-      volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: mysql-pv-claim
+  name: mysql-config
+  namespace: default
+data:
+  mysql.cnf: |
+    [mysqld]
+    user = root
+    port = 3306
+    datadir = /data
+    log-bin = /data/mysql-bin
+    bind-address = 0.0.0.0
+    skip-networking = false
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-pass
+type: Opaque
+stringData:
+  password: kmin
