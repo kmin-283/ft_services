@@ -22,8 +22,8 @@ spec:
         ports:
         - containerPort: 20
         - containerPort: 21
-        - containerPort: 30000
-        - containerPort: 30001
+        - containerPort: 20000
+        - containerPort: 20001
         env:
         - name: USERNAME
           valueFrom:
@@ -37,7 +37,8 @@ spec:
               key: password
         volumeMounts:
         - name: ftps-config
-          mountPath: /etc/vsftpd
+          subPath: vsftpd.conf
+          mountPath: /etc/vsftpd/vsftpd.conf
       volumes:
         - name: ftps-config
           configMap:
@@ -61,11 +62,11 @@ spec:
     port: 21
     targetPort: 21
   - name: pftp-data-0
-    port: 30000
-    targetPort: 30000
+    port: 20000
+    targetPort: 20000
   - name: pftp-data-1
-    port: 30001
-    targetPort: 30001
+    port: 20001
+    targetPort: 20001
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -77,6 +78,8 @@ data:
     # General Settings
     # ################
     listen=YES
+    listen_port=21
+    listen_ipv6=NO
     write_enable=YES
     # ##################
     # Connection Setting
@@ -85,18 +88,18 @@ data:
     force_local_data_ssl=YES
     force_local_logins_ssl=YES
     pam_service_name=vsftpd
-    ssl_ciphers=HIGH
     ssl_enable=YES
     # ############
     # Mode Setting
     # ############
-    port_enable=YES
-    connect_from_port_20=YES
+    port_enable=NO
+    # connect_from_port_20=YES
+    # ftp_data_port=20
     pasv_enable=YES
     seccomp_sandbox=NO
     pasv_address=192.168.99.101
-    pasv_min_port=30000
-    pasv_max_port=30010
+    pasv_min_port=20000
+    pasv_max_port=20001
     # ##################
     # Permission Setting
     # ##################
@@ -109,7 +112,7 @@ data:
     # Log Settings
     # ############
     xferlog_enable=YES
-    xferlog_std_format=YES
+    xferlog_std_format=NO
     xferlog_file=/var/log/vsftpd.log
     # ######################
     # Anonymous User Setting
@@ -119,6 +122,7 @@ data:
     # ###
     # etc
     # ###
+    # isolate_network=NO
     require_ssl_reuse=NO
     validate_cert=YES
     allow_writeable_chroot=YES

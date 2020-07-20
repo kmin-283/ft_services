@@ -1,3 +1,4 @@
+# export MINIKUBE_HOME=~/goinfre
 # echo "대쉬보드 설치"
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
 # echo "대쉬보드 접근 토큰 생성"
@@ -37,7 +38,7 @@ docker build -t service-telegraf ./telegraf > /dev/null
 echo "influxdb image build"
 docker build -t service-influxdb ./influxdb > /dev/null
 echo "grafana image build"
-docker build -t service-grafana ./grafana
+docker build -t service-grafana ./grafana > /dev/null
 echo "이미지 생성 완료"
 
 echo "mysql secret 생성"
@@ -63,5 +64,5 @@ echo "telegraf deployment 생성"
 kubectl apply -f ./telegraf/telegrafconf.yaml > /dev/null
 kubectl apply -f ./telegraf/telegraf.yaml > /dev/null
 echo "grafana deployment 생성"
-kubectl apply -f ./grafana/grafana.yaml
+kubectl apply -f ./grafana/grafana.yaml > /dev/null
 echo "모든 deployment 완료"
