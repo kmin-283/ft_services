@@ -79,8 +79,8 @@ data:
     define( 'WP_SITEURL',       '/wordpress/'  );
     define( 'WP_HOME',          '/wordpress/'  );
     define( 'DB_NAME',          'wordpress'  );
-    define( 'DB_USER',          'kmin');
-    define( 'DB_PASSWORD',      'kmin');
+    define( 'DB_USER',          'root');        # DB_USER와 DB_PASSWORD는 DB_HOST의 user, passwd
+    define( 'DB_PASSWORD',      'root');
     define( 'DB_HOST',          'mysql'  );
     define( 'DB_CHARSET',       'utf8mb4'  );
     define( 'DB_COLLATE',       '' );

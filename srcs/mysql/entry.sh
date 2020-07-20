@@ -9,7 +9,7 @@ if [[ ! -d /data/mysql ]]; then
 	mysql_install_db --user=root --datadir=/data
 
 	if [[ $MYSQL_ROOT_PASSWORD == "" ]]; then
-		MYSQL_ROOT_PASSWORD = "admin"
+		MYSQL_ROOT_PASSWORD = "root"
 	fi
 
 	tfile=`mktemp`

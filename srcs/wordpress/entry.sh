@@ -1,7 +1,7 @@
 #!/bin/sh
 # install wordpress
 if [[ ! -f /var/www/localhost/htdocs/index.php ]]; then
-	
+
 	curl -SL https://wordpress.org/wordpress-5.4.2.tar.gz \
 	| tar -xzC /var/www/localhost/htdocs --strip 1
 
@@ -15,9 +15,6 @@ EOF
 
 	mysql -hmysql -uroot -p$MYSQL_ROOT_PASSWORD < $tfile
 	rm -f $tfile
-
-	# 이미 설정된 wordpress 웹사이트를 적용시킬 때
-	# mysql -hmysql -Dwordpress -uroot -p$MYSQL_ROOT_PASSWORD < /tmp/wordpress.sql
 
 fi
 
@@ -46,6 +43,9 @@ sed -i "s/;*post_max_size =.*/post_max_size = ${PHP_MAX_POST}/i" /etc/php7/php.i
 sed -i "s/;*cgi.fix_pathinfo=.*/cgi.fix_pathinfo= ${PHP_CGI_FIX_PATHINFO}/i" /etc/php7/php.ini
 # config nginx
 sed -i "s/user\s*\s*nginx/user www/g" /etc/nginx/nginx.conf
+
+# 이미 설정된 wordpress 웹사이트를 적용시킬 때
+mysql -hmysql -Dwordpress -uroot -p$MYSQL_ROOT_PASSWORD < /tmp/wordpress.sql
 
 rc-status
 rc-service nginx start

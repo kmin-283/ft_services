@@ -55,6 +55,7 @@ spec:
   ports:
   - name: mysql
     port: 3306
+    targetPort: 3306
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -90,4 +91,4 @@ metadata:
   name: mysql-pass
 type: Opaque
 stringData:
-  password: kmin
+  password: root

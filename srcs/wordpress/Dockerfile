@@ -16,6 +16,7 @@ ENV PHP_CGI_FIX_PATHINFO=0
 
 COPY ./default.conf /etc/nginx/conf.d/default.conf
 COPY ./entry.sh /tmp/entry.sh
+COPY ./wordpress.sql /tmp/wordpress.sql
 RUN chmod 777 /tmp/entry.sh
 
 EXPOSE 80

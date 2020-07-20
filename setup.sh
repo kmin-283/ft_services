@@ -3,6 +3,9 @@
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
 # echo "대쉬보드 접근 토큰 생성"
 # kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+# minikube를 사용하지 않는 경우에 위의 방법을 사용하여 대쉬보드를 설치할 수 있다.
+# 그 후 kubectl proxy 라고 커맨드라인 창에 입력하고 발급된 토큰을 사용하여 대쉬보드에 접속한다.
+# minikube를 사용하는 경우에는 단순하게 minikube dashboard 라고 커맨드라인 창에 입력하면 된다.
 
 # echo "metallb설치"
 # kubectl get configmap kube-proxy -n kube-system -o yaml | \
@@ -19,12 +22,9 @@
 # echo "local image 사용가능하게 하기"
 eval $(minikube docker-env)
 
-# echo "ssl키 생성"
-# # make keys
-
 cd ./srcs/
 echo "mysql image build"
-docker build -t service-mysql ./mysql
+docker build -t service-mysql ./mysql > /dev/null
 echo "wordpress image build"
 docker build -t service-wordpress ./wordpress > /dev/null
 echo "phpmyadmin image build"
@@ -41,10 +41,8 @@ echo "grafana image build"
 docker build -t service-grafana ./grafana > /dev/null
 echo "이미지 생성 완료"
 
-# echo "mysql secret 생성"
-# kubectl apply -f ./mysql/mysqlpw.yaml > /dev/null
 echo "mysql deployment 생성"
-kubectl apply -f ./mysql/mysql.yaml
+kubectl apply -f ./mysql/mysql.yaml > /dev/null
 echo "wordpress deployment 생성"
 kubectl apply -f ./wordpress/wordpress.yaml > /dev/null
 echo "phpmyadmin deployment 생성"

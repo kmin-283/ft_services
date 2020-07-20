@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 9,
   "links": [],
   "panels": [
     {
@@ -23,27 +23,12 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "influxdb",
       "description": "Container CPU node requests ",
       "fieldConfig": {
         "defaults": {
-          "custom": {
-            "align": null
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
+          "custom": {},
+          "links": []
         },
         "overrides": []
       },
@@ -70,11 +55,8 @@
       "lines": true,
       "linewidth": 3,
       "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
       "percentage": true,
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.1.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -98,7 +80,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "kubernetes_pod_container",
+          "measurement": "docker_container_cpu",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -107,19 +89,19 @@
             [
               {
                 "params": [
-                  "cpu_usage_nanocores"
+                  "usage_total"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
-                "type": "distinct"
+                "type": "mean"
               }
             ]
           ],
           "tags": [
             {
-              "key": "container_name",
+              "key": "app",
               "operator": "=",
               "value": "ftps"
             }
@@ -221,7 +203,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.1.0",
       "targets": [
         {
           "groupBy": [
@@ -276,27 +258,12 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "influxdb",
       "description": "Container working memory request",
       "fieldConfig": {
         "defaults": {
-          "custom": {
-            "align": null
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
+          "custom": {},
+          "links": []
         },
         "overrides": []
       },
@@ -324,13 +291,10 @@
       "lines": false,
       "linewidth": 3,
       "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
       "percentage": true,
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.1.0",
       "pointradius": 2,
-      "points": false,
+      "points": true,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
@@ -352,7 +316,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "kubernetes_pod_container",
+          "measurement": "docker_container_mem",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -361,19 +325,43 @@
             [
               {
                 "params": [
-                  "memory_working_set_bytes"
+                  "total_active_anon"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
-                "type": "distinct"
+                "type": "mean"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "total_active_file"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "total_cache"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               }
             ]
           ],
           "tags": [
             {
-              "key": "container_name",
+              "key": "app",
               "operator": "=",
               "value": "ftps"
             }
@@ -474,7 +462,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.1.0",
       "targets": [
         {
           "groupBy": [
@@ -563,9 +551,10 @@
           ],
           "fields": "",
           "values": false
-        }
+        },
+        "textMode": "auto"
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.1.0",
       "targets": [
         {
           "groupBy": [
@@ -654,9 +643,10 @@
           ],
           "fields": "",
           "values": false
-        }
+        },
+        "textMode": "auto"
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.1.0",
       "targets": [
         {
           "groupBy": [
@@ -745,9 +735,10 @@
           ],
           "fields": "",
           "values": false
-        }
+        },
+        "textMode": "auto"
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.1.0",
       "targets": [
         {
           "groupBy": [
@@ -885,7 +876,7 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 25,
+  "schemaVersion": 26,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -910,5 +901,6 @@
   },
   "timezone": "",
   "title": "ftps metrics",
+  "uid": "jrqIsUnMk",
   "version": 2
 }
