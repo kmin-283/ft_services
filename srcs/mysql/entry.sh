@@ -21,7 +21,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 ALTER USER 'root'@'localhost' IDENTIFIED BY '';
 EOF
 
-	/usr/bin/mysqld --user=root --bootstrap --verbose=0 < $tfile
+	/usr/bin/mysqld --user=root --bootstrap < $tfile
 	rm -f $tfile
 fi
 

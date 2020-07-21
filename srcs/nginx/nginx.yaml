@@ -62,3 +62,8 @@ spec:
           name: secret-volumes
         - mountPath: /etc/nginx/conf.d
           name: configmap-volumes
+        livenessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          tcpSocket:
+            port: 22

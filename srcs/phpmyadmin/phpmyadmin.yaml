@@ -27,6 +27,12 @@ spec:
           subPath: config.inc.php
         - name: phpmyadmin-persistent-storage
           mountPath: /var/www/localhost/htdocs
+        livenessProbe:
+          httpGet:
+            path: /phpmyadmin
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
       volumes:
       - name: phpmyadmin-config
         configMap:

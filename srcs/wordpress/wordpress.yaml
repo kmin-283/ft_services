@@ -43,6 +43,12 @@ spec:
           subPath: wp-config.php
         - name: wordpress-persistent-storage
           mountPath: /var/www/localhost/htdocs
+        livenessProbe:
+          httpGet:
+            path: /wordpress
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
       volumes:
       - name: wp-config
         configMap:

@@ -23,44 +23,47 @@
 eval $(minikube docker-env)
 
 cd ./srcs/
-echo "mysql image build"
+echo -e "\033[47m\033[32m mysql image build \033[m"
 docker build -t service-mysql ./mysql > /dev/null
-echo "wordpress image build"
+echo -e "\033[47m\033[32m wordpress image build \033[m"
 docker build -t service-wordpress ./wordpress > /dev/null
-echo "phpmyadmin image build"
+echo -e "\033[47m\033[32m phpmyadmin image build \033[m"
 docker build -t service-phpmyadmin ./phpmyadmin > /dev/null
-echo "nginx image build"
+echo -e "\033[47m\033[32m nginx image build \033[m"
 docker build -t service-nginx ./nginx > /dev/null
-echo "ftps image build"
+echo -e "\033[47m\033[32m ftps image build \033[m"
 docker build -t service-ftps ./ftps > /dev/null
-echo "telegraf image build"
+echo -e "\033[47m\033[32m telegraf image build \033[m"
 docker build -t service-telegraf ./telegraf > /dev/null
-echo "influxdb image build"
+echo -e "\033[47m\033[32m influxdb image build \033[m"
 docker build -t service-influxdb ./influxdb > /dev/null
-echo "grafana image build"
+echo -e "\033[47m\033[32m grafana image build \033[m"
 docker build -t service-grafana ./grafana > /dev/null
-echo "이미지 생성 완료"
+echo -e "\033[47m\033[32m 이미지 생성 완료 \033[m"
 
-echo "mysql deployment 생성"
+echo -e "\033[47m\033[32m mysql deployment 생성 \033[m"
 kubectl apply -f ./mysql/mysql.yaml > /dev/null
-echo "wordpress deployment 생성"
+echo -e "\033[47m\033[32m wordpress deployment 생성 \033[m"
 kubectl apply -f ./wordpress/wordpress.yaml > /dev/null
-echo "phpmyadmin deployment 생성"
+echo -e "\033[47m\033[32m phpmyadmin deployment 생성 \033[m"
 kubectl apply -f ./phpmyadmin/phpmyadmin.yaml > /dev/null
-echo "nginx ssl secret 생성"
+echo -e "\033[47m\033[32m nginx ssl secret 생성 \033[m"
 kubectl apply -f ./nginx/nginxsecret.yaml > /dev/null
-echo "nginx configmap 생성"
+echo -e "\033[47m\033[32m nginx configmap 생성 \033[m"
 kubectl create configmap nginxconfigmap --from-file=./nginx/default.conf --from-file=./nginx/proxy.conf > /dev/null
-echo "nginx deployment 생성"
+echo -e "\033[47m\033[32m nginx deployment 생성 \033[m"
 kubectl apply -f ./nginx/nginx.yaml > /dev/null
-echo "ftps deployment 생성"
+echo -e "\033[47m\033[32m ftps deployment 생성 \033[m"
 kubectl apply -f ./ftps/ftps.yaml > /dev/null
-echo "influxdb deployment 생성"
+echo -e "\033[47m\033[32m influxdb deployment 생성 \033[m"
 kubectl apply -f ./influxdb/influxdbconf.yaml > /dev/null
 kubectl apply -f ./influxdb/influxdb.yaml > /dev/null
-echo "telegraf deployment 생성"
+echo -e "\033[47m\033[32m telegraf deployment 생성 \033[m"
 kubectl apply -f ./telegraf/telegrafconf.yaml > /dev/null
 kubectl apply -f ./telegraf/telegraf.yaml > /dev/null
-echo "grafana deployment 생성"
+echo -e "\033[47m\033[32m grafana deployment 생성 \033[m"
 kubectl apply -f ./grafana/grafana.yaml > /dev/null
-echo "모든 deployment 완료"
+echo -e "\033[47m\033[32m 모든 deployment 완료 \033[m"
+sleep 3
+echo "minikube dashboard 실행"
+# minikube dashboard
