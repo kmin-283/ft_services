@@ -1,4 +1,5 @@
 # export MINIKUBE_HOME=~/goinfre
+# minikube start --driver=virtualbox
 # echo "대쉬보드 설치"
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
 # echo "대쉬보드 접근 토큰 생성"

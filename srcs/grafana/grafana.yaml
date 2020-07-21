@@ -475,8 +475,8 @@ data:
     header_property = username
     auto_sign_up = true
     sync_ttl = 60
-    whitelist = 
-    headers = 
+    whitelist =
+    headers =
     # Read the auth proxy docs for details on what the setting below enables
     enable_login_token = false
 

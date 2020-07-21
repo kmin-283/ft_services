@@ -14,7 +14,15 @@ GRANT ALL PRIVILEGES ON wordpress.* TO '$USERNAME'@'%' WITH GRANT OPTION;
 EOF
 
 	mysql -hmysql -uroot -p$MYSQL_ROOT_PASSWORD < $tfile
+	until [ $? != 1 ]
+	do
+		echo "wordpress 데이터베이스를 재성성 합니다."
+		sleep 1
+		mysql -hmysql -uroot -p$MYSQL_ROOT_PASSWORD < $tfile
+	done
 	rm -f $tfile
+	# 이미 설정된 wordpress 웹사이트를 적용시킬 때
+	mysql -hmysql -Dwordpress -uroot -p$MYSQL_ROOT_PASSWORD < /tmp/wordpress.sql
 
 fi
 
@@ -43,8 +51,6 @@ sed -i "s/;*post_max_size =.*/post_max_size = ${PHP_MAX_POST}/i" /etc/php7/php.i
 sed -i "s/;*cgi.fix_pathinfo=.*/cgi.fix_pathinfo= ${PHP_CGI_FIX_PATHINFO}/i" /etc/php7/php.ini
 # config nginx
 sed -i "s/user\s*\s*nginx/user www/g" /etc/nginx/nginx.conf
-# 이미 설정된 wordpress 웹사이트를 적용시킬 때
-mysql -hmysql -Dwordpress -uroot -p$MYSQL_ROOT_PASSWORD < /tmp/wordpress.sql
 
 rc-status
 rc-service nginx start
