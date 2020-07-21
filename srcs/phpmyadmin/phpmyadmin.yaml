@@ -29,7 +29,6 @@ spec:
           mountPath: /var/www/localhost/htdocs
         livenessProbe:
           httpGet:
-            path: /phpmyadmin
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5

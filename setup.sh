@@ -67,4 +67,4 @@ kubectl apply -f ./grafana/grafana.yaml > /dev/null
 echo -e "\033[47m\033[32m 모든 deployment 완료 \033[m"
 sleep 3
 echo "minikube dashboard 실행"
-# minikube dashboard
+minikube dashboard
