@@ -1,4 +1,4 @@
-# export MINIKUBE_HOME=~/goinfre
+export MINIKUBE_HOME=~/goinfre
 # minikube start --driver=virtualbox
 # echo "대쉬보드 설치"
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
@@ -8,17 +8,19 @@
 # 그 후 kubectl proxy 라고 커맨드라인 창에 입력하고 발급된 토큰을 사용하여 대쉬보드에 접속한다.
 # minikube를 사용하는 경우에는 단순하게 minikube dashboard 라고 커맨드라인 창에 입력하면 된다.
 
-# echo "metallb설치"
-# kubectl get configmap kube-proxy -n kube-system -o yaml | \
-# sed -e "s/strictARP: false/strictARP: true/" | \
-# kubectl diff -f - -n kube-system
-# kubectl get configmap kube-proxy -n kube-system -o yaml | \
-# sed -e "s/strictARP: false/strictARP: true/" | \
-# kubectl apply -f - -n kube-system
-# kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
-# kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
-# kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
-# kubectl apply -f metallb-config.yaml
+echo "metallb설치"
+kubectl get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+kubectl diff -f - -n kube-system
+kubectl get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+kubectl apply -f - -n kube-system
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+kubectl apply -f metallb-config.yaml
+
+sleep 10
 
 # echo "local image 사용가능하게 하기"
 eval $(minikube docker-env)
@@ -67,4 +69,5 @@ kubectl apply -f ./grafana/grafana.yaml > /dev/null
 echo -e "\033[47m\033[32m 모든 deployment 완료 \033[m"
 sleep 3
 echo "minikube dashboard 실행"
+# minikube addons enable metrics-server
 minikube dashboard
